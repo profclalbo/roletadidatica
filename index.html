@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roletas Didáticas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Roletas Didáticas</h1>
+  <div class="container">
+    <div class="roleta-container">
+      <div class="roleta">
+        <div class="seta"></div>
+        <canvas id="roletaA"></canvas>
+      </div>
+      <button onclick="girarRoleta('roletaA')">Girar Roleta A</button>
+      <button onclick="reiniciarRoleta('roletaA')">Reiniciar Roleta A</button>
+    </div>
+    <div class="roleta-container">
+      <div class="roleta">
+        <div class="seta"></div>
+        <canvas id="roletaB"></canvas>
+      </div>
+      <button onclick="girarRoleta('roletaB')">Girar Roleta B</button>
+      <button onclick="reiniciarRoleta('roletaB')">Reiniciar Roleta B</button>
+    </div>
+  </div>
+
+  <footer>
+    <span>Roletas Didáticas</span>
+    Criadas pelo candidato Clalbo para fins educacionais e para a videoaula do 
+    <strong>Processo Seletivo Interno</strong><br>
+    <em>Projeto Desafios do Mundo REAL</em>
+  </footer>
+
+  <audio id="roleta-som" src="audio.mp3" preload="auto"></audio>
+  <script src="app.js"></script>
+</body>
+</html>
