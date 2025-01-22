@@ -1,4 +1,5 @@
 let angles = { roletaA: -90, roletaB: -90 }; // Ângulo inicial de cada roleta
+let isSpinning = { roletaA: false, roletaB: false }; // Status para evitar conflitos durante o giro
 
 function desenharRoleta(canvasId, setores) {
   const canvas = document.getElementById(canvasId);
@@ -33,9 +34,13 @@ function desenharRoleta(canvasId, setores) {
 }
 
 function girarRoleta(canvasId) {
+  // Evita múltiplos giros simultâneos
+  if (isSpinning[canvasId]) return;
+
+  isSpinning[canvasId] = true; // Define que a roleta está girando
   const canvas = document.getElementById(canvasId);
   const som = document.getElementById("roleta-som");
-  let startAngle = angles[canvasId];
+  let startAngle = angles[canvasId]; // Começa do ângulo atual
   const totalRotations = Math.floor(Math.random() * 3 + 5); // Rotação aleatória
   const finalAngle = Math.random() * 360; // Ângulo final aleatório
   const startTime = performance.now();
@@ -51,13 +56,13 @@ function girarRoleta(canvasId) {
 
     if (progress < 1) {
       const easedProgress = 1 - Math.pow(1 - progress, 3); // Curva suave para desacelerar
-      const currentAngle = easedProgress * (totalRotations * 360 + finalAngle);
-      angles[canvasId] = startAngle + currentAngle;
-      canvas.style.transform = `rotate(${angles[canvasId]}deg)`;
+      const newAngle = easedProgress * (totalRotations * 360 + finalAngle);
+      canvas.style.transform = `rotate(${startAngle + newAngle}deg)`; // Mantém o ângulo atual e adiciona o novo
       requestAnimationFrame(animate);
     } else {
       som.pause(); // Para o som
-      angles[canvasId] = (startAngle + totalRotations * 360 + finalAngle) % 360; // Salva o ângulo final
+      angles[canvasId] = (startAngle + totalRotations * 360 + finalAngle) % 360; // Atualiza o ângulo final
+      isSpinning[canvasId] = false; // Libera para novo giro
     }
   }
 
@@ -65,7 +70,7 @@ function girarRoleta(canvasId) {
 }
 
 function reiniciarRoleta(canvasId) {
-  angles[canvasId] = -90; // Ângulo inicial
+  angles[canvasId] = -90; // Reseta o ângulo para o inicial
   const canvas = document.getElementById(canvasId);
   canvas.style.transition = "transform 0.5s ease-out";
   canvas.style.transform = "rotate(-90deg)";
@@ -84,3 +89,10 @@ const setoresB = [
 
 desenharRoleta("roletaA", setoresA);
 desenharRoleta("roletaB", setoresB);
+
+// Alternar tema claro/escuro
+const themeSwitcher = document.getElementById('themeSwitcher');
+themeSwitcher.addEventListener('change', () => {
+  document.body.classList.toggle('dark-mode');
+  document.querySelector('footer').classList.toggle('dark-mode');
+});
